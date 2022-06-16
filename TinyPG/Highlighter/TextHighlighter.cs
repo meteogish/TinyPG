@@ -373,6 +373,9 @@ namespace TinyPG.Highlighter
             AddRtfEnd(sb);
 
             IsHighlighting = true;
+            //TODO: Fix Error here, 
+            // Cannot load the text.  at System.Windows.Forms.RichTextBox.StreamIn(Stream data, SF flags)
+            //  "{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0\\fnil\\fcharset0 Consolas;}}{\\colortbl;\\red0\\green128\\blue0;\\red0\\green128\\blue0;\\red255\\green0\\blue0;\\red128\\green0\\blue255;\\red128\\green0\\blue128;\\red128\\green0\\blue128;\\red43\\green145\\blue202;\\red0\\green0\\blue255;\\red255\\green0\\blue0;\\red0\\green0\\blue255;\\red43\\green145\\blue202;\\red0\\green128\\blue0;\\red0\\green128\\blue0;\\red163\\green21\\blue21;\\red0\\green128\\blue0;\\red0\\green128\\blue0;\\red163\\green21\\blue21;\\red0\\green128\\blue0;\\red0\\green128\\blue0;\\red163\\green21\\blue21;\\red128\\green0\\blue128;\\red128\\green0\\blue128;\\red0\\green0\\blue255;\\red128\\green0\\blue128;\\red163\\green21\\blue21;}\\viewkind4\\uc1\\pard\\lang1033\\f0\\fs20{{\\cf1 //Tiny Parser Generator v1.3\\par\n}{{\\cf1 //Copyright \\u169? Herre Kuijpers 2008-2012\\par\n}{{\\cf0 \\par\n{{\\cf0 }}"
             Textbox.Rtf = sb.ToString();
             IsHighlighting = false;
         }

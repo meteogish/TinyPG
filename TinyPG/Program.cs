@@ -58,6 +58,7 @@ namespace TinyPG
             {
                 Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
                 Application.EnableVisualStyles();
+                Application.SetHighDpiMode(HighDpiMode.SystemAware);
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new MainForm());
             }
