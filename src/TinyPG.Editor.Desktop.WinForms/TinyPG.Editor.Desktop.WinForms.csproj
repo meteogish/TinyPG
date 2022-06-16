@@ -59,6 +59,6 @@
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\TinyPG.GrammarCompiler\TinyPG.GrammarCompiler.csproj" />
+    <ProjectReference Include="..\TinyPG.GrammarCompiler\TinyPG.GrammarCompiler.csproj" />
   </ItemGroup>
 </Project>
