@@ -63,20 +63,5 @@ namespace TinyPG.CodeGenerators
             }
             return null; // codegenerator was not found
         }
-
-        public static CodeDomProvider CreateCodeDomProvider(string language)
-        {
-            switch (language.ToLower(CultureInfo.InvariantCulture))
-            {
-                // set the default templates directory
-                case "visualbasic":
-                case "vbnet":
-                case "vb.net":
-                case "vb":
-                    return new Microsoft.VisualBasic.VBCodeProvider();
-                default:
-                    return new Microsoft.CSharp.CSharpCodeProvider(new Dictionary<string, string> { { "CompilerVersion", "v3.5" } });
-            }
-        }
     }
 }

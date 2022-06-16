@@ -7,17 +7,11 @@
 // EXPRESS OR IMPLIED. USE IT AT YOUR OWN RISK. THE AUTHOR ACCEPTS NO
 // LIABILITY FOR ANY DATA DAMAGE/LOSS THAT THIS PRODUCT MAY CAUSE.
 //-----------------------------------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using CodeDom = System.CodeDom.Compiler;
 using System.Reflection;
 
 using TinyPG.CodeGenerators;
 using TinyPG.Debug;
 
-using System.Windows.Forms;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
@@ -135,10 +129,8 @@ namespace TinyPG.Compiler
 
         private Assembly CreateAssemblyViaRoslyn(IEnumerable<string> sources, SupportedLanguage supportedLanguage)
         {
-            ParseOptions parseOptions = supportedLanguage == SupportedLanguage.CSharp
-                ? CSharpParseOptions.Default 
-                : VisualBasicParseOptions.Default;
-            SyntaxTree[] syntaxTrees = sources.Select(c => SyntaxFactory.ParseSyntaxTree(c, parseOptions, "")).ToArray();
+            //ParseOptions parseOptions = supportedLanguage == SupportedLanguage.CSharp ? CSharpParseOptions.Default : VisualBasicParseOptions.Default;
+            SyntaxTree[] syntaxTrees = sources.Select(c => SyntaxFactory.ParseSyntaxTree(c, null, "")).ToArray();
 
             string[] trustedAssembliesPaths = ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")).Split(Path.PathSeparator);
             string[] neededAssemblies = new[]
@@ -211,11 +203,6 @@ namespace TinyPG.Compiler
         /// <returns>the output of the parser/compiler</returns>
         public CompilerResult Run(string input)
         {
-            return Run(input, null);
-        }
-
-        public CompilerResult Run(string input, RichTextBox textHighlight)
-        {
             CompilerResult compilerresult = new CompilerResult();
             string output = null;
             if (assembly == null) return null;
@@ -234,24 +221,25 @@ namespace TinyPG.Compiler
 
             List<IParseError> errors = (List<IParseError>)treetype.InvokeMember("Errors", BindingFlags.GetField, null, treeinstance, null);
 
-            if (textHighlight != null && errors.Count == 0)
-            {
-                // try highlight the input text
-                object highlighterinstance = assembly.CreateInstance("TinyPG.Debug.TextHighlighter", true, BindingFlags.CreateInstance, null, new object[] { textHighlight, scannerinstance, parserinstance }, null, null);
-                if (highlighterinstance != null)
-                {
-                    output += "Highlighting input..." + "\r\n";
-                    Type highlightertype = highlighterinstance.GetType();
-                    // highlight the input text only once
-                    highlightertype.InvokeMember("HighlightText", BindingFlags.InvokeMethod, null, highlighterinstance, null);
-
-                    // let this thread sleep so background thread can highlight the text
-                    System.Threading.Thread.Sleep(20);
-
-                    // dispose of the highlighter object
-                    highlightertype.InvokeMember("Dispose", BindingFlags.InvokeMethod, null, highlighterinstance, null);
-                }
-            }
+            //TextHighlighting on WinForms
+            // if (textHighlight != null && errors.Count == 0)
+            // {
+            //     // try highlight the input text
+            //     object highlighterinstance = assembly.CreateInstance("TinyPG.Debug.TextHighlighter", true, BindingFlags.CreateInstance, null, new object[] { textHighlight, scannerinstance, parserinstance }, null, null);
+            //     if (highlighterinstance != null)
+            //     {
+            //         output += "Highlighting input..." + "\r\n";
+            //         Type highlightertype = highlighterinstance.GetType();
+            //         // highlight the input text only once
+            //         highlightertype.InvokeMember("HighlightText", BindingFlags.InvokeMethod, null, highlighterinstance, null);
+            //
+            //         // let this thread sleep so background thread can highlight the text
+            //         System.Threading.Thread.Sleep(20);
+            //
+            //         // dispose of the highlighter object
+            //         highlightertype.InvokeMember("Dispose", BindingFlags.InvokeMethod, null, highlighterinstance, null);
+            //     }
+            // }
             if (errors.Count > 0)
             {
                 foreach (IParseError err in errors)

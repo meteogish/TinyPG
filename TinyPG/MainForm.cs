@@ -526,7 +526,8 @@ namespace TinyPG
                 CompilerResult result = new CompilerResult();
                 if (compiler.IsCompiled)
                 {
-                    result = compiler.Run(textInput.Text, textInput);
+                    //TODO: RichTextBox is not passed here because it was moved to another project
+                    result = compiler.Run(textInput.Text);
 
                     //textOutput.Text = result.ParseTree.PrintTree();
                     textOutput.Text += result.Output;
