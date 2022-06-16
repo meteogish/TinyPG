@@ -21,6 +21,8 @@ using System.Windows.Forms;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
+using Microsoft.CodeAnalysis.VisualBasic;
+using SyntaxFactory = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 
 namespace TinyPG.Compiler
@@ -119,15 +121,24 @@ namespace TinyPG.Compiler
                     sources.Add(generator.Generate(Grammar, true));
             }
 
+            SupportedLanguage supportedLanguage = language switch
+            {
+                "visualbasic" or "vbnet" or "vb.net" or "vb" => SupportedLanguage.VBNet,
+                _ => SupportedLanguage.CSharp,
+            };
+
             if (sources.Count > 0)
             {
-                assembly = CreateAssemblyViaRoslyn(sources);
+                assembly = CreateAssemblyViaRoslyn(sources, supportedLanguage);
             }
         }
 
-        private Assembly CreateAssemblyViaRoslyn(IEnumerable<string> sources)
+        private Assembly CreateAssemblyViaRoslyn(IEnumerable<string> sources, SupportedLanguage supportedLanguage)
         {
-            SyntaxTree[] syntaxTrees = sources.Select(c => SyntaxFactory.ParseSyntaxTree(c, null, "")).ToArray();
+            ParseOptions parseOptions = supportedLanguage == SupportedLanguage.CSharp
+                ? CSharpParseOptions.Default 
+                : VisualBasicParseOptions.Default;
+            SyntaxTree[] syntaxTrees = sources.Select(c => SyntaxFactory.ParseSyntaxTree(c, parseOptions, "")).ToArray();
 
             string[] trustedAssembliesPaths = ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")).Split(Path.PathSeparator);
             string[] neededAssemblies = new[]
@@ -154,13 +165,26 @@ namespace TinyPG.Compiler
                 .ToList();
 
             // create and return the compilation
-            CSharpCompilation compilation = CSharpCompilation.Create
-            (
-                "TinyPG",
-                syntaxTrees,
-                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary),
-                references: references
-            );
+            Compilation compilation = null;
+            if (supportedLanguage == SupportedLanguage.CSharp)
+            {
+                compilation = CSharpCompilation.Create
+                (
+                    "TinyPG",
+                    syntaxTrees,
+                    options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary),
+                    references: references
+                );
+            }
+            else
+            {
+                compilation = VisualBasicCompilation.Create(
+                    "TinyPG",
+                    syntaxTrees,
+                    options: new VisualBasicCompilationOptions(OutputKind.DynamicallyLinkedLibrary, parseOptions: VisualBasicParseOptions.Default),
+                    references: references
+                );
+            }
 
             using (MemoryStream stream = new MemoryStream())
             {

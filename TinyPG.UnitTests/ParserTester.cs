@@ -15,7 +15,7 @@ namespace TinyPG.UnitTests
     {
         // TODO: set the correct paths to be able to run the unittests succesfully
         private const string TEMPLATEPATH = @"..\..\..\..\TinyPG\Templates\C#\";
-        private const string TEMPLATEPATH_VB = @"D:\MyProjects\Net\TinyPG v1.3\TinyPG\Templates\VB\";
+        private const string TEMPLATEPATH_VB = @"..\..\..\..\TinyPG\Templates\VB\";
         private const string OUTPUTPATH = @"..\..\..\";
         private const string TESTFILESPATH = @"..\..\..\Testfiles\";
 
