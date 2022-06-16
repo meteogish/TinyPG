@@ -440,8 +440,7 @@ namespace TinyPG.Highlighter
                         Tree = _tree; // assign new tree
                 }
                 
-                Textbox.Invoke(new MethodInvoker(HighlightTextInternal));
-
+                // Textbox.Invoke(new MethodInvoker(HighlightTextInternal));
             }
         }
 

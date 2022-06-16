@@ -9,6 +9,8 @@
 //-----------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using CodeDom = System.CodeDom.Compiler;
 using System.Reflection;
 
@@ -16,6 +18,9 @@ using TinyPG.CodeGenerators;
 using TinyPG.Debug;
 
 using System.Windows.Forms;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 
 
 namespace TinyPG.Compiler
@@ -86,20 +91,20 @@ namespace TinyPG.Compiler
         private void BuildCode()
         {
             string language = Grammar.Directives["TinyPG"]["Language"];
-            CodeDom.CompilerResults Result;
-            CodeDom.CodeDomProvider provider = CodeGeneratorFactory.CreateCodeDomProvider(language);
-            System.CodeDom.Compiler.CompilerParameters compilerparams = new System.CodeDom.Compiler.CompilerParameters();
-            compilerparams.GenerateInMemory = true;
-            compilerparams.GenerateExecutable = false;
-            compilerparams.ReferencedAssemblies.Add("System.dll");
-            compilerparams.ReferencedAssemblies.Add("System.Windows.Forms.dll");
-            compilerparams.ReferencedAssemblies.Add("System.Drawing.dll");
-            compilerparams.ReferencedAssemblies.Add("System.Xml.dll");
+            // CodeDom.CompilerResults Result;
+            // CodeDom.CodeDomProvider provider = CodeGeneratorFactory.CreateCodeDomProvider(language);
+            // System.CodeDom.Compiler.CompilerParameters compilerparams = new System.CodeDom.Compiler.CompilerParameters();
+            // compilerparams.GenerateInMemory = true;
+            // compilerparams.GenerateExecutable = false;
+            // compilerparams.ReferencedAssemblies.Add("System.dll");
+            // compilerparams.ReferencedAssemblies.Add("System.Windows.Forms.dll");
+            // compilerparams.ReferencedAssemblies.Add("System.Drawing.dll");
+            // compilerparams.ReferencedAssemblies.Add("System.Xml.dll");
 
             // reference this assembly to share interfaces (for debugging only)
 
-            string tinypgfile = Assembly.GetExecutingAssembly().Location;
-            compilerparams.ReferencedAssemblies.Add(tinypgfile);
+            // string tinypgfile = Assembly.GetExecutingAssembly().Location;
+            // compilerparams.ReferencedAssemblies.Add(tinypgfile);
 
             // generate the code with debug interface enabled
             List<string> sources = new List<string>();
@@ -116,15 +121,62 @@ namespace TinyPG.Compiler
 
             if (sources.Count > 0)
             {
-                Result = provider.CompileAssemblyFromSource(compilerparams, sources.ToArray());
+                assembly = CreateAssemblyViaRoslyn(sources);
+            }
+        }
 
-                if (Result.Errors.Count > 0)
+        private Assembly CreateAssemblyViaRoslyn(IEnumerable<string> sources)
+        {
+            SyntaxTree[] syntaxTrees = sources.Select(c => SyntaxFactory.ParseSyntaxTree(c, null, "")).ToArray();
+
+            string[] trustedAssembliesPaths = ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")).Split(Path.PathSeparator);
+            string[] neededAssemblies = new[]
+            {
+                "System.dll",
+                 "System.Windows.Forms.dll",
+                 "System.Drawing.dll",
+                 //"System.Xml.dll",
+                 "System.Xml.ReaderWriter.dll",
+                 "System.Xml.XmlSerializer.dll",
+                 //"System.Xml.Serialization.dll",
+                 "System.Collections.dll",
+                 "System.Text.RegularExpressions.dll",
+                 "System.Runtime.dll"
+            };
+            
+            List<PortableExecutableReference> references = trustedAssembliesPaths
+                .Where(p => neededAssemblies.Contains(Path.GetFileName(p)))
+                .Select(p => MetadataReference.CreateFromFile(p))
+                .Concat(new []{ 
+                    MetadataReference.CreateFromFile(typeof(object).Assembly.Location), 
+                    MetadataReference.CreateFromFile(Assembly.GetExecutingAssembly().Location) 
+                })
+                .ToList();
+
+            // create and return the compilation
+            CSharpCompilation compilation = CSharpCompilation.Create
+            (
+                "TinyPG",
+                syntaxTrees,
+                options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary),
+                references: references
+            );
+
+            using (MemoryStream stream = new MemoryStream())
+            {
+                // emit result into a stream
+                EmitResult emitResult = compilation.Emit(stream);
+
+                if (!emitResult.Success)
                 {
-                    foreach (CodeDom.CompilerError o in Result.Errors)
-                        Errors.Add(o.ErrorText + " on line " + o.Line.ToString());
+                    // if not successful, throw an exception
+                    Errors.AddRange(emitResult
+                            .Diagnostics
+                            .Where(d => d.Severity == DiagnosticSeverity.Error)
+                            .Select(d => d.GetMessage()));
                 }
-                else
-                    assembly = Result.CompiledAssembly;
+
+                return Assembly.Load(stream.ToArray());
             }
         }
 

@@ -250,7 +250,6 @@ namespace <%Namespace%>
             set { this.value = value; }
         }
 
-        [XmlAttribute]
         public TokenType Type;
 
         public Token()

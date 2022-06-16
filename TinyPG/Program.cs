@@ -8,6 +8,7 @@
 // LIABILITY FOR ANY DATA DAMAGE/LOSS THAT THIS PRODUCT MAY CAUSE.
 //-----------------------------------------------------------------------
 using System;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using TinyPG.Compiler;
@@ -57,9 +58,11 @@ namespace TinyPG
             else
             {
                 Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(Application_ThreadException);
+                ApplicationConfiguration.Initialize();
                 Application.EnableVisualStyles();
                 Application.SetHighDpiMode(HighDpiMode.SystemAware);
                 Application.SetCompatibleTextRenderingDefault(false);
+                Application.SetDefaultFont(new Font(new FontFamily("Microsoft Sans Serif"), 8.25f));
                 Application.Run(new MainForm());
             }
             return (int)ExitCode.Success;

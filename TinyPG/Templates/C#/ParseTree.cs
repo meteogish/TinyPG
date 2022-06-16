@@ -108,7 +108,6 @@ namespace <%Namespace%>
     }
 
     [Serializable]
-    [XmlInclude(typeof(ParseTree))]
     public partial class ParseNode<%IParseNode%>
     {
         protected string text;
@@ -116,11 +115,9 @@ namespace <%Namespace%>
         <%ITokenGet%>
         public List<ParseNode> Nodes { get {return nodes;} }
         <%INodesGet%>
-        [XmlIgnore] // avoid circular references when serializing
         public ParseNode Parent;
         public Token Token; // the token/rule
 
-        [XmlIgnore] // skip redundant text (is part of Token)
         public string Text { // text to display in parse tree 
             get { return text;} 
             set { text = value; }
