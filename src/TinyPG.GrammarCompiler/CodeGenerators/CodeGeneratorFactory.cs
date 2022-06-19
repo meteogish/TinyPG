@@ -43,8 +43,6 @@ namespace TinyPG.CodeGenerators
                             return new VBNet.ScannerGenerator();
                         case "ParseTree":
                             return new VBNet.ParseTreeGenerator();
-                        case "TextHighlighter":
-                            return new VBNet.TextHighlighterGenerator();
                     }
                     break;
                 default: // c# is default language
@@ -56,8 +54,6 @@ namespace TinyPG.CodeGenerators
                             return new CSharp.ScannerGenerator();
                         case "ParseTree":
                             return new CSharp.ParseTreeGenerator();
-                        case "TextHighlighter":
-                            return new CSharp.TextHighlighterGenerator();
                     }
                     break;
             }
