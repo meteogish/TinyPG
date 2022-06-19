@@ -14,8 +14,8 @@ namespace TinyPG.UnitTests
     public class ParserTester
     {
         // TODO: set the correct paths to be able to run the unittests succesfully
-        private const string TEMPLATEPATH = @"..\..\..\..\src\TinyPG.GrammarCompiler\Templates\C#\";
-        private const string TEMPLATEPATH_VB = @"..\..\..\..\src\TinyPG.GrammarCompiler\Templates\VB\";
+        private const string TEMPLATEPATH = @"..\..\..\..\..\src\TinyPG.GrammarCompiler\Templates\C#\";
+        private const string TEMPLATEPATH_VB = @"..\..\..\..\..\src\TinyPG.GrammarCompiler\Templates\VB\";
         private const string OUTPUTPATH = @"..\..\..\";
         private const string TESTFILESPATH = @"..\..\..\Testfiles\";
 
