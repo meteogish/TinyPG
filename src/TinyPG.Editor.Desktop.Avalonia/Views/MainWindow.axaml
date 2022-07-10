@@ -1,0 +1,48 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:TinyPG.Editor.Desktop.Avalonia.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="TinyPG.Editor.Desktop.Avalonia.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="TinyPG.Editor.Desktop.Avalonia"
+        xmlns:AvalonEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+    <!-- <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/> -->
+    <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Open..." Command="{Binding OpenNewDocumentCommand}"/>
+                    <Separator/>
+                    <MenuItem Header="_Exit"/>
+                </MenuItem>
+                <!-- <MenuItem Header="_Edit"> -->
+                <!--     <MenuItem Header="Copy"/> -->
+                <!--     <MenuItem Header="Paste"/> -->
+                <!-- </MenuItem> -->
+            </Menu>
+        <Border
+            DockPanel.Dock="Bottom"
+            BorderBrush="Red"
+            BorderThickness="2"
+            CornerRadius="3"
+            Padding="4">
+            <StackPanel>
+                <AvalonEdit:TextEditor Name="Editor"
+                                       FontFamily="Consolas,Menlo,Monospace"
+                                       Margin="30"
+                                       Foreground="#D4D4D4"
+                                       HorizontalScrollBarVisibility="Auto"
+                                       VerticalScrollBarVisibility="Visible"
+                                       FontWeight="Light"
+                                       Document="{Binding Document}"
+                                       FontSize="14" />
+            </StackPanel>
+        </Border>
+    </DockPanel>
+
+</Window>
