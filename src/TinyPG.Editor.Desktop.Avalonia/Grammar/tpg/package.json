@@ -1,0 +1,35 @@
+{
+  "name": "tpg",
+  "displayName": "%displayName%",
+  "description": "%description%",
+  "version": "1.0.0",
+  "publisher": "vscode",
+  "license": "MIT",
+  "engines": {
+    "vscode": "0.10.x"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "tpg",
+        "aliases": [
+          "TPG",
+          "tpg"
+        ],
+        "extensions": [ ".tpg" ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "tpg",
+        "scopeName": "source.tpg",
+        "path": "./syntaxes/TPG.tmLanguage.json"
+      }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/microsoft/vscode.git"
+  }
+}

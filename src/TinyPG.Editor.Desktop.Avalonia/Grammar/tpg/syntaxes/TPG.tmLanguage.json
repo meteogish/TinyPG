@@ -1,0 +1,162 @@
+{
+	"version": "https://github.com/microsoft/vscode-JSON.tmLanguage/commit/9bd83f1c252b375e957203f21793316203f61f70",
+	"name": "TPG (TinyPG Grammar)",
+	"scopeName": "source.tpg",
+	"patterns": [
+		{
+			"include": "#directive"
+		},
+		{
+			"include": "#production"
+		}
+	],
+	"repository": {
+		"hex": {
+			"match": "(0x[0-9a-fA-F]{6})",
+			"name": "constant.hex.tpg"
+		},
+		"bracket_open": {
+			"match": "\\(",
+			"name": "punctuation.parenthesis.open.tpg"
+		},
+		"bracket_close": {
+			"match": "\\)",
+			"name": "punctuation.parenthesis.close.tpg"
+		},
+		"identifier": {
+			"match": "[a-zA-Z_][a-zA-Z0-9_]*",
+			"name": "punctuation.parenthesis.close.tpg"
+		},
+		"code_block": {
+			"match": "\\{[^\\}]*\\}([^};][^}]*\\}+)*;",
+			"name": "punctuation.parenthesis.close.tpg"
+		},
+		"directive": {
+			"begin": "<%\\s*@",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.definition.tag.begin.html"
+				}
+			},
+			"end": "%>",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.tag.end.html"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#identifier"
+				},
+				{
+					"include": "#string"
+				}
+			]
+		},
+		"param": {
+			"patterns": [
+				{
+					"include": "#number"
+				},
+				{
+					"include": "#hex"
+				}
+			]
+		},
+		"production": {
+			"patterns": [
+				{
+					"include": "#identifier"
+				},
+				{
+					"match": "->",
+					"name": "production.arrow.tpg"
+				},
+				{
+					"include": "#rule"
+				},
+				{
+					"match": ";",
+					"name": "production.semicolon.tpg"
+				}
+			]
+		},
+		"symbol": {
+			"patterns": [
+				{
+					"include": "#identifier"
+				},
+				{
+					"begin": "#bracket_open",
+					"end": "#bracket_close",
+					"patterns": [
+						{
+							"include": "#symbol"
+						}
+					]
+				},
+				{
+					"match": "(\\*|\\+|\\?)",
+					"name": "operator.unary.tpg"
+				}
+			]
+		},
+		"sub_rule": {
+			"patterns": [
+				{
+					"include": "#symbol"
+				},
+				{
+					"match": "\\|",
+					"name": "operator.pipe.tpg"
+				}
+			]
+		},
+		"rule": {
+			"patterns": [
+				{
+					"include": "#string"
+				},
+				{
+					"include": "#sub_rule"
+				}
+			]
+		},
+		"number": {
+			"match": "(?x)        # turn on extended mode\n  -?        # an optional minus\n  (?:\n    0       # a zero\n    |       # ...or...\n    [1-9]   # a 1-9 character\n    \\d*     # followed by zero or more digits\n  )\n  (?:\n    (?:\n      \\.    # a period\n      \\d+   # followed by one or more digits\n    )?\n    (?:\n      [eE]  # an e character\n      [+-]? # followed by an option +/-\n      \\d+   # followed by one or more digits\n    )?      # make exponent optional\n  )?        # make decimal portion optional",
+			"name": "constant.numeric.json"
+		},
+		"string": {
+			"begin": "\"",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.begin.json"
+				}
+			},
+			"end": "\"",
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.string.end.json"
+				}
+			},
+			"name": "string.quoted.double.json",
+			"patterns": [
+				{
+					"include": "#stringcontent"
+				}
+			]
+		},
+		"stringcontent": {
+			"patterns": [
+				{
+					"match": "(?x)                # turn on extended mode\n  \\\\                # a literal backslash\n  (?:               # ...followed by...\n    [\"\\\\/bfnrt]     # one of these characters\n    |               # ...or...\n    u               # a u\n    [0-9a-fA-F]{4}) # and four hex digits",
+					"name": "constant.character.escape.json"
+				},
+				{
+					"match": "\\\\.",
+					"name": "invalid.illegal.unrecognized-string-escape.json"
+				}
+			]
+		},
+	}
+}
