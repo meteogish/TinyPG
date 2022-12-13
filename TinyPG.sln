@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{85A26C40
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyPG.UnitTests", "tests\TinyPG.UnitTests\TinyPG.UnitTests.csproj", "{3AA393BE-FD38-4E82-B78F-3626ADEF79AD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyPG.Editor.Desktop.Avalonia", "src\TinyPG.Editor.Desktop.Avalonia\TinyPG.Editor.Desktop.Avalonia.csproj", "{ED471D93-7545-462C-B486-670A261C35A4}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = TinyPG3.vsmdi
@@ -38,6 +40,10 @@ Global
 		{3AA393BE-FD38-4E82-B78F-3626ADEF79AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AA393BE-FD38-4E82-B78F-3626ADEF79AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AA393BE-FD38-4E82-B78F-3626ADEF79AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED471D93-7545-462C-B486-670A261C35A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED471D93-7545-462C-B486-670A261C35A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED471D93-7545-462C-B486-670A261C35A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED471D93-7545-462C-B486-670A261C35A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,5 +52,6 @@ Global
 		{2F5DACC0-FD5F-4D51-834C-AB50E49B74A1} = {46BDBCBA-825C-4C13-8899-1C8F4E10F855}
 		{F5804FAC-F2EF-43B9-9E06-BED5939222DD} = {46BDBCBA-825C-4C13-8899-1C8F4E10F855}
 		{3AA393BE-FD38-4E82-B78F-3626ADEF79AD} = {85A26C40-0C0C-4333-9DE2-A5C38E8DFAA0}
+		{ED471D93-7545-462C-B486-670A261C35A4} = {46BDBCBA-825C-4C13-8899-1C8F4E10F855}
 	EndGlobalSection
 EndGlobal
