@@ -17,7 +17,7 @@ namespace TinyPG.CodeGenerators.CSharp
             if (string.IsNullOrEmpty(Grammar.GetTemplatePath()))
                 return null;
 
-            string scanner = File.ReadAllText(Grammar.GetTemplatePath() + templateName);
+            string scanner = File.ReadAllText(Path.Combine(Grammar.GetTemplatePath(), templateName));
 
             int counter = 2;
             StringBuilder tokentype = new StringBuilder();

@@ -3,7 +3,6 @@
 Imports System
 Imports System.Collections.Generic
 Imports System.Text.RegularExpressions
-Imports System.Xml.Serialization
 <%Imports%>
 
 Namespace <%Namespace%>
@@ -16,12 +15,12 @@ Namespace <%Namespace%>
         Public CurrentLine As Integer
         Public CurrentColumn As Integer
         Public CurrentPosition As Integer
-        Public Skipped As List(Of Token) ' tokens that were skipped
+        Public Skipped As List(Of Token) ' tokens that were skipped'
         Public Patterns As Dictionary(Of TokenType, Regex)
 
         Private LookAheadToken As Token
         Private Tokens As List(Of TokenType)
-        Private SkipList As List(Of TokenType) ' tokens to be skipped
+        Private SkipList As List(Of TokenType) ' tokens to be skipped'
 
         Public Sub New()
             Dim regex As Regex
@@ -146,7 +145,7 @@ Namespace <%Namespace%>
         Private m_text As String
         Private m_value As Object
 
-        ' contains all prior skipped symbols
+        ' contains all prior skipped symbols'
         Private m_skipped As List(Of Token)
 
 
@@ -201,7 +200,6 @@ Namespace <%Namespace%>
             End Set
         End Property
 
-        <XmlAttribute()> _
         Public Type As TokenType
 
         Public Sub New()
@@ -213,7 +211,7 @@ Namespace <%Namespace%>
             m_startPos = start
             m_endPos = endPos
             Text = ""
-            ' must initialize with empty string, may cause null reference exceptions otherwise
+            ' must initialize with empty string, may cause null reference exceptions otherwise'
             Value = Nothing
         End Sub
 

@@ -19,7 +19,7 @@ namespace TinyPG.CodeGenerators.CSharp
 
             // generate the parser file
             StringBuilder parsers = new StringBuilder();
-            string parser = File.ReadAllText(Grammar.GetTemplatePath() + templateName);
+            string parser = File.ReadAllText(Path.Combine(Grammar.GetTemplatePath(), templateName));
 
             // build non terminal tokens
             foreach (NonTerminalSymbol s in Grammar.GetNonTerminals())

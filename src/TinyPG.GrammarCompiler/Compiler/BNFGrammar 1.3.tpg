@@ -40,6 +40,7 @@ COMMENTBLOCK      	-> @"/\*[^*]*\*+(?:[^/*][^*]*\*+)*/";
 Start             	-> Directive* ExtProduction* EOF;
 Directive 		-> DIRECTIVEOPEN IDENTIFIER NameValue* DIRECTIVECLOSE;
 NameValue		-> IDENTIFIER ASSIGN STRING;
+
 ExtProduction     	-> Attribute* Production;
 Attribute	      	-> SQUAREOPEN IDENTIFIER ( BRACKETOPEN Params? BRACKETCLOSE )? SQUARECLOSE;
 Params			-> Param (COMMA Param)*;

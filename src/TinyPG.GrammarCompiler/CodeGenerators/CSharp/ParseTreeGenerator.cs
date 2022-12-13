@@ -18,7 +18,7 @@ namespace TinyPG.CodeGenerators.CSharp
                 return null;
 
             // copy the parse tree file (optionally)
-            string parsetree = File.ReadAllText(Grammar.GetTemplatePath() + templateName);
+            string parsetree = File.ReadAllText(Path.Combine(Grammar.GetTemplatePath(), templateName));
 
             StringBuilder evalsymbols = new StringBuilder();
             StringBuilder evalmethods = new StringBuilder();

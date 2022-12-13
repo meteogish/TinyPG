@@ -3,12 +3,10 @@
 Imports System
 Imports System.Collections.Generic
 Imports System.Text
-Imports System.Xml.Serialization
 <%Imports%>
 
 Namespace <%Namespace%>
 #Region "ParseTree"
-    <Serializable()> _
     Public Class ParseErrors
         Inherits <%ParseErrors%>
 
@@ -17,7 +15,6 @@ Namespace <%Namespace%>
         End Sub
     End Class
 
-    <Serializable()> _
     Public Class ParseError <%ParseError%>
         Private m_message As String
         Private m_code As Integer
@@ -76,8 +73,7 @@ Namespace <%Namespace%>
         End Sub
     End Class
 
-    ' rootlevel of the node tree
-    <Serializable()> _
+    ' rootlevel of the node tree '
     Partial Public Class ParseTree
         Inherits ParseNode<%IParseTree%>
 
@@ -124,8 +120,6 @@ Namespace <%Namespace%>
 #End Region
 
 #Region "ParseNode"
-    <Serializable()> _
-    <XmlInclude(GetType(ParseTree))> _
     Partial Public Class ParseNode <%IParseNode%>
         Protected m_text As String
         Protected m_nodes As List(Of ParseNode)
@@ -138,13 +132,11 @@ Namespace <%Namespace%>
         End Property
 
         <%INodesGet%>
-        <XMLIgnore()> _
         Public Parent As ParseNode
         Public Token As Token
-        ' the token/rule
-        <XmlIgnore()> _
+        ' the token/rule'
         Public Property Text() As String<%ImplementsIParseNodeText%>
-            ' text to display in parse tree 
+            ' text to display in parse tree '
             Get
                 Return m_text
             End Get
@@ -175,7 +167,7 @@ Namespace <%Namespace%>
                 Return o
             End If
 
-            ' left to right
+            ' left to right'
             For Each node As ParseNode In nodes
                 If node.Token.Type = type Then
                     System.Math.Max(System.Threading.Interlocked.Decrement(index), index + 1)

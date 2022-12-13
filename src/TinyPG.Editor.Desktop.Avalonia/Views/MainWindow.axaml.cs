@@ -11,6 +11,7 @@ using AvaloniaEdit.Document;
 using AvaloniaEdit.TextMate;
 using ReactiveUI;
 using TextMateSharp.Grammars;
+using TinyPG.Editor.Desktop.Avalonia.Grammars;
 using TinyPG.Editor.Desktop.Avalonia.ViewModels;
 
 namespace TinyPG.Editor.Desktop.Avalonia.Views
@@ -20,6 +21,7 @@ namespace TinyPG.Editor.Desktop.Avalonia.Views
         private readonly TextEditor _textEditor;
         private readonly TextMate.Installation _textMateInstallation;
         private readonly RegistryOptions _registryOptions;
+        private readonly TPGGrammarRegistryOptions _tpgRegistryOptions;
         public MainWindow()
         {
             InitializeComponent();
@@ -37,9 +39,10 @@ namespace TinyPG.Editor.Desktop.Avalonia.Views
             
             // _textEditor.Document = new TextDocument("// AvaloniaEdit supports displaying control chars:");
             _registryOptions = new RegistryOptions(ThemeName.DarkPlus);
+            _tpgRegistryOptions = new TPGGrammarRegistryOptions(_registryOptions);
 
-            _textMateInstallation = _textEditor.InstallTextMate(_registryOptions);
-            _textMateInstallation.SetGrammar(_registryOptions.GetScopeByLanguageId(_registryOptions.GetLanguageByExtension(".cs").Id));
+            _textMateInstallation = _textEditor.InstallTextMate(_tpgRegistryOptions);
+            _textMateInstallation.SetGrammar("source.tpg");
             
             // _textEditor.TextArea.TextView.Redraw();
         }

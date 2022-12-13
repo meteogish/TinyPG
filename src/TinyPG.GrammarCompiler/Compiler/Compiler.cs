@@ -7,6 +7,10 @@
 // EXPRESS OR IMPLIED. USE IT AT YOUR OWN RISK. THE AUTHOR ACCEPTS NO
 // LIABILITY FOR ANY DATA DAMAGE/LOSS THAT THIS PRODUCT MAY CAUSE.
 //-----------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 
 using TinyPG.CodeGenerators;
@@ -16,7 +20,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
 using Microsoft.CodeAnalysis.VisualBasic;
-using SyntaxFactory = Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 
 namespace TinyPG.Compiler
@@ -129,22 +132,24 @@ namespace TinyPG.Compiler
 
         private Assembly CreateAssemblyViaRoslyn(IEnumerable<string> sources, SupportedLanguage supportedLanguage)
         {
-            //ParseOptions parseOptions = supportedLanguage == SupportedLanguage.CSharp ? CSharpParseOptions.Default : VisualBasicParseOptions.Default;
-            SyntaxTree[] syntaxTrees = sources.Select(c => SyntaxFactory.ParseSyntaxTree(c, null, "")).ToArray();
-
             string[] trustedAssembliesPaths = ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")).Split(Path.PathSeparator);
             string[] neededAssemblies = new[]
             {
                 "System.dll",
                  "System.Windows.Forms.dll",
-                 "System.Drawing.dll",
                  //"System.Xml.dll",
                  "System.Xml.ReaderWriter.dll",
                  "System.Xml.XmlSerializer.dll",
                  //"System.Xml.Serialization.dll",
                  "System.Collections.dll",
                  "System.Text.RegularExpressions.dll",
-                 "System.Runtime.dll"
+                 "System.Runtime.dll",
+                 
+                 
+                 //Highlighter support
+                 "System.Drawing.dll",
+                 "System.ComponentModel.Primitives.dll",
+                 "System.Drawing.Primitives.dll",
             };
             
             List<PortableExecutableReference> references = trustedAssembliesPaths
@@ -160,6 +165,7 @@ namespace TinyPG.Compiler
             Compilation compilation = null;
             if (supportedLanguage == SupportedLanguage.CSharp)
             {
+                SyntaxTree[] syntaxTrees = sources.Select(c => Microsoft.CodeAnalysis.CSharp.SyntaxFactory.ParseSyntaxTree(c, null, "")).ToArray();
                 compilation = CSharpCompilation.Create
                 (
                     "TinyPG",
@@ -170,6 +176,7 @@ namespace TinyPG.Compiler
             }
             else
             {
+                SyntaxTree[] syntaxTrees = sources.Select(c => Microsoft.CodeAnalysis.VisualBasic.SyntaxFactory.ParseSyntaxTree(c, null, "")).ToArray();
                 compilation = VisualBasicCompilation.Create(
                     "TinyPG",
                     syntaxTrees,

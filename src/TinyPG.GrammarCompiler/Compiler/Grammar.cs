@@ -31,6 +31,7 @@ namespace TinyPG.Compiler
         public Directive this[string name]
         {
             get { return Find(name); }
+            set { this[name] = value; }
         }
     }
 
@@ -98,6 +99,9 @@ namespace TinyPG.Compiler
             }
             return symbols;
         }
+        
+        public Action<string> Log { get; set; }
+        public string TemplatePathCustom { get; set; }
 
         /// <summary>
         /// Once the grammar terminals and nonterminal production rules have been defined
@@ -158,6 +162,13 @@ namespace TinyPG.Compiler
                 d["Language"] = "C#"; // set default language
             if (!d.ContainsKey("TemplatePath"))
             {
+                if (TemplatePathCustom != null)
+                {
+                    d["TemplatePath"] = TemplatePathCustom;
+                }
+                else
+                {
+                    
                 switch (d["Language"].ToLower(CultureInfo.InvariantCulture))
                 {
                     // set the default templates directory
@@ -171,7 +182,10 @@ namespace TinyPG.Compiler
                         d["TemplatePath"] = AppDomain.CurrentDomain.BaseDirectory + @"Templates\C#\";
                         break;
                 }
+                }
             }
+
+            Log?.Invoke($"TemplatePath: {d["TemplatePath"]}");
 
             d = Directives.Find("Parser");
             if (d == null)
@@ -199,9 +213,6 @@ namespace TinyPG.Compiler
             }
             if (!d.ContainsKey("Generate"))
                 d["Generate"] = "True"; // generate parsetree by default
-
-            if (!d.ContainsKey("Generate"))
-                d["Generate"] = "False"; // do NOT generate a text highlighter by default
         }
 
         public string GetTemplatePath()
@@ -216,7 +227,10 @@ namespace TinyPG.Compiler
 
             DirectoryInfo dir = new DirectoryInfo(folder + @"\");
             if (dir.Exists)
+            {
+                Log?.Invoke($"GetTempltatePath: {folder}");
                 return folder;
+            }
             else
                 return null;
         }

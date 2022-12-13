@@ -25,7 +25,7 @@
 		},
 		"identifier": {
 			"match": "[a-zA-Z_][a-zA-Z0-9_]*",
-			"name": "punctuation.parenthesis.close.tpg"
+			"name": "constant.character.escape.json.comments"
 		},
 		"code_block": {
 			"match": "\\{[^\\}]*\\}([^};][^}]*\\}+)*;",
@@ -35,7 +35,9 @@
 			"begin": "<%\\s*@",
 			"beginCaptures": {
 				"0": {
-					"name": "punctuation.definition.tag.begin.html"
+					//"name": "punctuation.definition.tag.begin.html"
+					//"name": "entity.other.attribute-name"
+					"name": "keyword.operator.new"
 				}
 			},
 			"end": "%>",
@@ -70,7 +72,7 @@
 				},
 				{
 					"match": "->",
-					"name": "production.arrow.tpg"
+					"name": "runctuation.section.embedded.begin"
 				},
 				{
 					"include": "#rule"
@@ -150,7 +152,8 @@
 			"patterns": [
 				{
 					"match": "(?x)                # turn on extended mode\n  \\\\                # a literal backslash\n  (?:               # ...followed by...\n    [\"\\\\/bfnrt]     # one of these characters\n    |               # ...or...\n    u               # a u\n    [0-9a-fA-F]{4}) # and four hex digits",
-					"name": "constant.character.escape.json"
+					//"name": "constant.character.escape.json"
+					"name": "constant.character"
 				},
 				{
 					"match": "\\\\.",
